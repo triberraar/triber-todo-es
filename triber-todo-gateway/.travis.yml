@@ -1,0 +1,32 @@
+jdk:
+- oraclejdk8
+sudo: required
+services:
+- docker
+notifications:
+  email: false
+script:
+- mvn verify
+after_success:
+- chmod +x travis-docker.sh
+- ./travis-docker.sh
+cache:
+  directories:
+  - $HOME/.m2
+env:
+  global:
+  # docker stuff add by doing travis encrypt DOCKER_USER=<> --add and travis encrypt DOCKER_PASS=<> --add
+  - secure: CR18wB9Nx8bLCnnH95qUAra8cTjl5fpHMexVPJb1OkoFx2l76VjdLzzp/QKghu6wvwVQWHqLKGIKZ7oBigoU8Qadt8U5klPqi+3SdY5g0skGtyqh7m/2GOfD+FK+FR1BDKKxecNuuk5YIb4QmZHgYC22YanM13E7PYbtGuAh1YfEOJ3orpz6RamhhigkQ+25gv3OoGF3UgMwLxZ0/IRRyqNOMeCQ528x9F8UC8d77guOOuEDYKDAzxdA7ZRZZBNS0BItplPfCmOgO/E1e+2zZMK5qcKmigQSa+NBOyFmq66AM+Y0yfbXDg2UyqhrahPS0yviyzsza+7LsMifR2wnuu/qZYz/VNl0mNB1PlBPSMxRlGLsgAln+hjEiwuZJK5yPHY4ZZpyeqIQXe2+JSM70kW4jQB0y78dIQq4Jh7de34JNNLIOv2xzogOGa4U0jYyLZDjlZgghZZgA5KuDVNOtprLIleYZ+O/SgEG8nJIwseGaLd+oO9onaPtGsHCZhnbmG1GD0IQUe+vYGTEep766JS+oXdwfIjEIwGMpa5wAiU+A5jSPO7MeiaLhhq54hgXhe5gJfy2f7jOD1XsX3EuJVUhS0wWQolAt6G+PMF3erg+wlAOQaBnZBr53EEGh8Y7xIydZ5ph2k9qHT3Bh4fd7ljJvikdhk7VfUnjm6n5mdc=
+  - secure: INd7XoTmS0I0eBDViWAKXmEvoNBR18ZDqegA+DeHptB7eZ/pNuFVH7ipmHZNSTHjOufHJYDD8Lpg4/woREFb8GJ3ygZkPyydtYtZL6vNFt1/e7Of0R67jR1I6A9Zq6sb8KN+pJ7GX2BPx5AK8kpsa+zLAntxApewHPULSoSAC8a1SzAYRqzYrJbkW93Lmf6Mcg5Dg0oTM7rIZtDZyjBHTOHNVjb/44ptojWX9IqA3yQwaHRsDs4i8nGAFtOdCKrcTJfukFU4mWpV6u/vTB7s6B+FrtilhLtN3VoKG5G9JBEC+nQRkrJCoOkJumTENIanKQBiPfveb8cWcQZ7Fg67UIl7PRRrHwWGdOOkuRxfao4odiZNgy9XCIQ0CxT6S8Zk4niS4is3gdBoABzCDYvU69lb5X3gUFMrDc88Oyb0WtHdGjw5p7PJqD0RNbMP1eSZKhTRX+gdWg9FRGymaP6WGo9l7D2zvpC+mynqwxYpnAE6oHiKumvTR2FpJs/8FR3cpU+jbyqUtHJHs6l8TKjc60stkQy4r1Jz/GHxHmJao/93IrCuS5vYYMkbQObnubCoWSqcNLKzpXUz9cLjX1HLwS0CSnuJK0A9L9gGk/NPDGHYZ9UZC/GE6vsjHY7/RH7BEYOsQlgebipTqs553ldMi3WPS3e8reQOgXxFeiVyyig=
+deploy:
+  provider: releases
+  api_key: 
+  file: target/triber-todo-gateway-${TRAVIS_TAG}.jar
+  skip_cleanup: true
+  on:
+    repo: triberraar/triber-todo-gateway
+    branch: develop
+    tags: true
+  api-key:
+  # generate by doing travis encrypt <key from github> --add deploy.api-key
+    secure: FKEox2xDxGJq9Hs2lMPPV3907BqNzKBswrJg3gfOlqyoIXqa3Uu28Z8q8rY2eo1MttAE9px/eRAK2EQ+7hA8LBRdYfq7yE3fgXu70LEsO7MU5qK/LE5tO/OmrSjRWb0MAOPkhVemkI8AGgt1O2MQ04x1XhjapHcZAOy615TLPFaTnlMdbNcYEaH0Cs8ZlRN7TrpNxjUqsf3x7N/WYb/ayC+gJb7RohgZJ7rdNFH22r7clfsj2jRPvM1+ZbqFr2HqqhK3prOgX2hIwwPrKsrIHafsKjms8COgsJ7Oeib20mroiG8/stw9P1G7UDAinxWMHQ3TseyEGRPN7Bds577yEquSKvXgrTR5mwnzD377IiAxOKiVWBHFXIQMPo2EQfjnrnCPOxgn7Bf5M6lkUoA1+WpphTYw+JccQdTnYT+D2Cah29GUIwXkA2qnWsqD7LSJ63VK80cjDmWpeFKm0o/AzN+SkxbyJRUrk9YBvsZA7RGy/bwjtjV8Xi5GaXXq/u9jDCMopHIO1UkCk4eIytPQkMm7mBiIkbsm4UEslCG45aWpM/QBrSQssYaS7h30mwCyLH6SmVr6Alhb9zh0rrbf6ViJlimFCts8JrqFPJtofMo8JQMstCl83osdzAOcEFSFmOQ+HYqDtbuXOTQkuF8PjjrSwqoH2xSICeOD1cX9vhw=

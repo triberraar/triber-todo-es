@@ -1,0 +1,16 @@
+server:
+  port: 0
+spring:
+  cloud:
+    stream:
+      bindings:
+        command:
+          destination: command.exchange
+          contentType: application/json
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+info:
+  artifactId: "@project.artifactId@"
+  description: "@project.description@"
+  version: "@project.version@"

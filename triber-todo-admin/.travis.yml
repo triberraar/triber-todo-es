@@ -1,0 +1,31 @@
+jdk:
+- oraclejdk8
+sudo: required
+services:
+- docker
+notifications:
+  email: false
+script:
+- mvn verify
+after_success:
+- chmod +x travis-docker.sh
+- ./travis-docker.sh
+cache:
+  directories:
+  - $HOME/.m2
+env:
+  global:
+  # docker stuff add by doing travis encrypt DOCKER_USER=<> --add and travis encrypt DOCKER_PASS=<> --add
+  - secure: 0KVOTZdAnEGufjo2xZPBcH6+jx0gX4eqmgWBMjiHivDMnpQMe4BZxJJ6KAxguYAlkUPtXdoFeIir5TEbaqDqk9HOFATyeYiQXHYCe6gXU9desYdKhD9/AGh0Seua3aeBoVj1uQVirG8Bdmpc4uJf4gztmPbqkRseq5nrfJqjLZR0zNMjWnADjtEhft7lI9COfTeFUTK7wdJhcrwjhVW6DP5CzGQoocs3nA43q5/8gHYXRy2MxfQdJB8sgP2x+dU820ok8OPa/f+W1M7f4MTncp9OSl68G+YjZffwsnbVopAtSY9qecZHrOo25sALMzGPs7cj19Yx1eqoSSbGYcQjJtxvsduCG6R6rrmyGslq7yAaGO6EhwI0pzIYrJf4ucZ4IDd2TlchcQgj0YdAMp2qnqKfAYlDF5yE540TjoE/fMMFjVIn9x3Hn2uBwhOJQRh0C4Q/l/HkctHUkBFviETIts67kqXJxpKK+2lH0+28MHfnBSRvifu4RmoQb6CS4KLXz+yr4MPrZAGms1ZxBwk/HdigWtkVsUq4Ol/y+5r1RF1/ZPCQHxpXk6jDeoI8cUEk+XwNf1uBHV4uNEaVgEa146JjcrOOM8FczMXLXv/AxQAwqjWiRGPL3sSo3sR69dDQiYJ6DxnQAuF7uzxRD/mLXqNmUGfraMRg++ZUurrK8cM=
+  - secure: 25o2XnzBqxaWKybxKKRWz0MpvawHsbvPpT5L9ewvQTjhP9t1pFWiWgn66m8EOM5l18sczc0MKgqTj4UdqkQdtHO+bDPyGjA3KcJl2mdDa3067a+6xg0fYfFXOGuYQ0sz7k+SUSSE3AFz/fMu+bWsotg9LVsIt/mhy+xy/TrE7dSPtOnms+ctGWITOgxGcTKFyRzUCCmIrCsJoX4hS1fjGUgal1MxXRH8Dv6OwBEwa8QUvndirQ8Rjy1LMO7S//oZEcxGyWe/qtDvrSVO/eM2OuC7Fgc2K4fI+ZC3uW7NlCFJqqs1gcXAzizmQXtLFjZGzkAbz7EqJkcmgKDdyHWE+krZ8fRt6z0tYo0mNdMbjbedQj9kq+32e3sMZPdYM6FZMEfWGtF8HvoMll6PWY1co5JIttmdVDT5Q8e19mpaOfQNklpQhsbVeTGcn3EXEXKXbp8WeK8vnCm6h8Fm5zYnYQ2LDoAPmsHINGoO3ATjCzgH4MJxsAEG51X2CDvPmWx1btGsPnpgQ5UlNh6crQNyiSvbvfuFaPblULUXtJTNnWGFGG50maqQsHsyDyb2fpXdbB68a6N2Xf+raDtGn99u1rUOpzZYadngIvPZF4P+IE7EDvWZR19HuPh507XlJ6z8InYrarDd5aQs38+/R7C4SpiJUHXnFxbpRPxZYVkHjWk=
+deploy:
+  provider: releases
+  file: target/triber-todo-admin-${TRAVIS_TAG}.jar
+  skip_cleanup: true
+  on:
+    repo: triberraar/triber-todo-admin
+    branch: develop
+    tags: true
+     # generate by doing travis encrypt <key from github> --add deploy.api-key
+  api-key:
+    secure: GapHS51rRJ5UMT4CLxIrBq4dlVde3wvk0jPegOJBIhSJyFFwekpI14tNgGZt5f9t4oGE4cfGrR+sEBMX+TJ+kgqoaDdfRnQT6MUggIl+LtqPOiKR330zhO8P5+I2yo48dzdIxXfX55Zr86oQbf0JleMhqYCGjC0BFrTh/msOgz4+lU6VxMr4fmbrI2FD2dewtxoX6NZ+qeo5tU4NjdzXw/s0awHBBNc15+HyleTW/SkQ2idkbYVRYoYN/tl8SgNnzCMgNMAuB5nwhtePXwbIh6SleTiBiZ0D26ZkqbNvb/WpDvBBUwU6aM6oo4VL0HeH3Z2Lp4y7LBZMxzt1swd2ZeqKowq/6/n21PPTRM6vclBenFt/vh2D6JfyrUw7YqAkiBE+OmaG8xg1vZfvHyR5EHPMMmqFWzKQnBunxq9qiuEjtyDq3TZQT1I5ZaAEzmUNRH4gvpha9hZuc9Pot+V9QJ9DKkpbEeC5Bzr44F3cpBDwIsJnusSqY8a/v4+Qt+Rtq39XWJi27EP8E/VX1LS5z+KsDnnIUjBBwQxsH/02fkCdYOTWallhEbzgIRZ/9DtForbHwGOyzfIVhT4RDV/rOe9PvxHVYLQuMgvYNZpyyuO61NtretnpbWZ7ngHvKJCTJYrQM8nxaAlGFYDXBeXHkSc3RDxG/FAfVqubYZRlliw=

@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.sonatype.mavenbook.multi</groupId>
+    <artifactId>triber-todo-es-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <name>triber todo es parent</name>
+
+    <modules>
+        <module>triber-todo-admin</module>
+        <module>triber-todo-config-server</module>
+        <module>triber-todo-discovery</module>
+        <module>triber-todo-gateway</module>
+        <module>triber-todo-hystrix</module>
+        <module>triber-todo-common</module>
+        <module>triber-todo-event-store</module>
+        <module>triber-todo-command-endpoint</module>
+        <module>triber-todo-command-processor</module>
+        <module>triber-todo-overview-query-endpoint</module>
+        <module>triber-todo-overview-query-listener</module>
+    </modules>
+</project>

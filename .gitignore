@@ -1,0 +1,13 @@
+triber-todo-admin/target
+triber-todo-command-endpoint/target
+triber-todo-command-processor/target
+triber-todo-common/target
+triber-todo-config-server/target
+triber-todo-discovery/target
+triber-todo-event-store/target
+triber-todo-gateway/target
+triber-todo-hystrix/target
+triber-todo-overview-query-endpoint/data
+triber-todo-overview-query-endpoint/target
+triber-todo-overview-query-listener/data
+triber-todo-overview-query-listener/target

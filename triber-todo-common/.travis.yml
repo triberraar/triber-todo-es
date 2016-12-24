@@ -1,0 +1,30 @@
+jdk:
+- oraclejdk8
+sudo: required
+notifications:
+  email: false
+script:
+- mvn verify
+after_success:
+- cp ./target/classes/bintray.json bintray.json
+cache:
+  directories:
+  - $HOME/.m2
+deploy:
+  - provider: bintray
+    file: bintray.json
+    user: triberraar
+    key:
+      secure: eJnXc51NnDUICuYA8MJa5go93U0llnnpFb4n1tM0eNZpHTbcOP8BOBJIcOFtOpf5mdOMOxbXSgW2Cv3Ea9vLiQRWVeTQou4LrmbzMqGI6//B7D329/1yiDUWh4cDPY+R/CDMFII1lhr6gXD472HsWcxcCVgKoaTmLhIKLpuu8zXVeoijNd4AV92k/Y+MaWwcCsr9X2oTmhsb1eNYcluXiqHoC9csQdq07DcfyG9Ur9A/TOib6Hva0L09Lsd0sTm5r+BjgHJpMpOKQ63pWSBkchXRBEFv+oZ/9o2IbocOBJBrPU6EkG2VxAA+nYpDFOE4ZqBAhV24xclvSjAEYMF8UE/K46JVj+4rm/McIOdQh7y3yXRf2Kyi8IrzShbJqE1sA8NsHH9+BT5bl5pue2QvCXi0n7PRoQuAObjGvvqnh2UIjZFpM2oU/AVwljeOIQetYyOLDEuo/ixkevWLscOfKFrR123D8rxP08X/D3wf76KlUmhlQp8M4nFnCWBbVcJOqH6YUEoeTZSa498ghD3SwqLugqHj0IviXZ1KpJIoPi83xWe9PJTFoEz8JGNRQrz0Z1yBItbwx0HkYgo/dV2Yubj+0f1HIB7wAZCcN9CjS3WM/2uTKk2lSDY86u9iSHN7Y8I6JUtkOGgf25JcmjnFHwcWFihXG6+Zm73jMqaMXhI=
+    on:
+      repo: triberraar/triber-todo-common
+      tags: true
+  - provider: releases
+    file: target/triber-todo-common-${TRAVIS_TAG}.jar
+    skip_cleanup: true
+    on:
+      repo: triberraar/triber-todo-common
+      tags: true
+    api-key:
+    # generate by doing travis encrypt <key from github> --add deploy.api-key
+      secure: ETwQxENT6maB+ZoObUj8vwbXR0s7DFwOyJNa3Gn78CsuojbqsiUivmFhQFbf+mg6tYYLq+niYp1xarkJVw+dgc5GWvPEM4ogHms/0f36ZsY9tC++ZxEP1LLhHqDgY/se1ai2KyHLawXSfOkVJhiALl3LzQk0Yn5nF6RChB9XgS53tCEViTc/gZ76Ct5jumG1YV9x/h7L8p2KXWoH8r2cfO0X4t6jXcqRgGofYHePi3mhpVmp4x3SpRa+jdREEGQBbV5ckYKOcA37fpmSEcI6WRaoyctqhaMR0OZJ3uwPaycz+WkCpM1vcspQFs3wDwrF0dWS8QyD9lhoDBu8r0KQHDXk0g2BWQFF0lTiX9XicUtdV8hbPkiPoCnZfR4Fh3zYyVTkxrp6NdlRo98Q9A9VXPAGUC9NnjvR+FthVCdxHr5pA0toW10rWgLRNHJWYVLxB/jC8Ymp5EJTnE2PqjaZmRO5nvBIRjMF8f4CfF9RS9PTs7yZvPPuXPiHKZugdP/aOYm9FgG4NV5bg9W5SZtJx+YSvW1mvcZlMxSEvSUeWWp89AI3yoHgAYZRkIdFmTsBM3AB6Fyg+W9+FEPFhYscfP/vco4dTbsI58u6jAJwQZpz5Ik+YtJfNwUP1Cbuo76vtXQa5HF/xmwghEy9NErQ8pENb6Sw+ftbjh65hzaZAB4=

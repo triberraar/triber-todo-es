@@ -1,0 +1,41 @@
+jdk:
+- oraclejdk8
+sudo: required
+services:
+- docker
+notifications:
+  email: false
+script:
+- mvn verify
+after_success:
+- cp ./target/classes/bintray.json bintray.json
+- chmod +x travis-docker.sh
+- ./travis-docker.sh
+cache:
+  directories:
+  - $HOME/.m2
+env:
+  global:
+  # docker stuff add by doing travis encrypt DOCKER_USER=<> --add and travis encrypt DOCKER_PASS=<> --add
+  - secure: 0bA5TX7fXhac7AwIOnuJrIEtSzyToMuxlYYVQvQ9NJNvST6vxKQ1iJox21J/UQSy5c5eZ83Ix/C+byVz0MpVtIQmSjOzCkyXJGfDPcszEOJGJJM/Iy4etzWI+IhaVvbopJWpL8OKRRY+gMI4Z5pFDACi0Acgn9/B+/GdjVc96mLnv9+hpkftVdAxYeAAj4BbD9TAPGgOytzkRHC6HmMFONu0E67gSnFXgqeoTzdSvCHNIf4JNx90MhSbzik6OneRuiuLxyePhh0zQuOIjhkWwbswmGkbaz0yjxUGSFHhzXOK1LLuMp9crkSfj+6iEI3rhxfxc3H+lom6ahm5mm0Lh7ynA5EyLUrGhiPuybduBVqgtkace5HFjMcXnw9A12meSIFyCTpoxATnMOIbEPi9vxiu4V0LAnMYQuGgXW1fFuw6hAdVBaKGQzqvJSLg/ZoQVv2Yp6siHmiI8uTEdoN87o/7WCZEJ7nZ3+i9Seh1HDbPhFeVYA4KsD8lPF7y2mwWQ+Dgz56p/ICA1xPBSI8cacnIK4nmi5Q6LOFdl8I1jRLe2XCLiB1VJvO90J/UrXm8RM4tpxnp4PcrlXB3EuUeraEAeCJvuGS4OP/HBCxX9WYwZlAjDSRxd9nxqV1WP5RhFM/20FBdy0D8oYcNmZ21tW7N7zgxxyAqjoPUNWRzc0I=
+  - secure: n4P3+8uc+mDhQG9/9lXxoa4PbFry6yAXiqfVYzW6lZ6DebsZh91su5steMgRJ7qcpf/iWVZYPPdNMVE6CqghBzJdSSEDZhBmsLHNYONBrazhG6YSBUJcW2g98IQkrmpdBvC23a7vzj4vfUNEgiLQ71kDpG/eix7rD+aCMCtG9ZQ9FNu+wSlm3hSKFvuasPfk6BHfhrsMmpvsfH5sPGTXUPijFfkLbw4r4uqcKhTZ96YinriSOSoiQZbhZwV8CRCRR/w4dCxLXI1w7xPID5S3nzMLcJ4qs/wJ5dqsRUbWCo7MD0ZUdklWSDJh6y+C/vA289ZpDmiDaoyjo2PqpmRKE4FHZxhnIbociSMPWU8Pqew9MBccDHLhBEwUlC2bjGhr2B8CVvgXxZxTsO2kyspr12TDhWSjG/H5kxVcHbzcZmar+pdB80wsA1mEDca6h9VY6//+E5vLxTeFdw1fgEOmHWrsUTOVCKBGNjVxhVQya/PboiWymi7BCU54QvNPFF6Ue/rHu6sNQEAt4/HwXurMiJRYBEGd+PRqz3X9qEzcnF92Qx4PMST5zvQX70La5+Gn3ZbvY/c6pUENhJb6++nOD5GpY0/sWdlfyFj3UIUwQVEoWX+v1s3teuufb3ObPexv1e+qzEhfSHwkzwikpQm1y0VDAATnzmmxG++VhQrKvWo=
+deploy:
+  - provider: releases
+    file: target/triber-todo-config-server-${TRAVIS_TAG}.jar
+    skip_cleanup: true
+    on:
+      repo: triberraar/triber-todo-config-server
+      branch: develop
+      tags: true
+    api-key:
+  # generate by doing travis encrypt <key from github> --add deploy.api-key
+      secure: zkYh5NgvGT/sflCkhW0csdFACPaSQ7ru91xA41ddYQTzTmOBmH/p3xZwh8HdVpBW1zcBnZdleWnBcfYe8aGm0ZgWnbaMDS1166LP6fMbp+u+Cgz3yXVZ93a3Pd2wA07wDaC6TrUmsAAWnEL2K4DxVM9etOCIacFMiIEwkkbGd1GfzKdubfFGNKEY16i5hNDCLzt3OsdWYjn48/vyooPtn9fW55nrs7Sh+W+ZPFzvoqxZ2wjURfoABfLgqmH94vAF0xHYdAkGjVHP8wc58MEZXX0fWhLq1lhhE1DUZn2hXiL+Kv6dqMzqULnlzc0zOIVQ/Hq/Q+c6TtM91GHvUj9Lsd6ltxAdYAq4M9aULBvl8FuhqkzXneEvZ1Fivc8DPRVo8b1ARgrFAm1AeVwoK2AqcOKkt85Jl9qEKdv4Fn0MfJYLTH5Tx2CjYUkin3cuazHLZNprE3CGxSjqNuhLg5HJzCN4vzfL7E5t28zTFucKxNYf6IPj8AaJgxo4H4/EPv3HaXblEWcA8w1Ch6lp3/94cuWnKfdyeLNJKP48kBJdfrvFQboLQ2xThdGMoH/fV7xT9QZsLQ4r9PVkr6NgEzO1bOiZnN8rJQhClGAK4jHgJuzHyT6ZBKj5bGPwZggPxWyNMxj1/oEjhrMqZYVfm8y7lycI5fyU7Um6mLREtkv9NU4=
+  - provider: bintray
+    file: bintray.json
+    user: triberraar
+    key:
+      secure: rFO5ikB/0Sk+yceu/HNnQiRlo7bvrrsDxWd/77GfC0/QkhHFblbHd0MhIe0edl3oVNN2STqM6SigdMMbn7pnr83sjQaOzEL/Pm68w7iysPO2j7Az+dajtREIk+lt75+sESfqBWhJmQoAK6A2E5LtR03SCbGS4B+4gAJieQvDjie0EZdRxhRdfgAdnZZvdJQic6gra7pUpFeSBwY+tPzEuctGzwrr+BXVXAWPURYoUgM3urtG+2HTv+29EC4QNqgg8OVt9QkIQctd8DYm+N6gpGZLxk4kediKQUz2MYu4DncqZNTaYtL0XRpoZQsRyLshnn6mVInv7BhBCCo7+NtR+Q7ruABb3qS+0KBDO/wtuUljOInHPitv+/nmYkN71tw8MmZSVO4JnZQa68Z/gazOP7dKKjbHF+KnvfnGa/smAk902fu+e3EMBhfa03sDSmHncIQuGcU9p3aWbPLbRQ2q+dAoyEtHluChVMoMQughU+IVM+Ljl3XYFV+y75QhHscZLtVSTFbcE/0Ovbi90beREZq93p00ch+A091pY/EhqhTK98DYNwOE3arnF/MJEYzPRoD//xz/xO0ISMy/epxBiWfxR3j/Faxb58lDgbN9VV4ZWnlH266+T6kmq1NM1/30XZ4BWUsbCHedMmWu4MopgKCkcrXgZ4dRYdGYpQOx3ck=
+    on:
+      repo: triberraar/triber-todo-config-server
+      branch: develop
+      tags: true

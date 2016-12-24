@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: triber-todo-hystrix
+  cloud:
+    config:
+      uri: http://localhost:8888

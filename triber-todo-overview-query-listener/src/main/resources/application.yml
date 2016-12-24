@@ -1,0 +1,22 @@
+server:
+  port: 0
+spring:
+  cloud:
+    stream:
+      bindings:
+        event:
+          destination: event.exchange
+          contentType: application/json
+          group: overview-query
+      rabbit:
+        bindings:
+          event:
+            consumer:
+              durableSubscription: true
+  jackson:
+      serialization:
+        write-dates-as-timestamps: false
+info:
+  artifactId: "@project.artifactId@"
+  description: "@project.description@"
+  version: "@project.version@"

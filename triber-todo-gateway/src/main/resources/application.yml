@@ -1,0 +1,14 @@
+server:
+  port:
+    8000
+zuul:
+  prefix: /api
+  ignoredServices: '*'
+  routes:
+    triber-todo-command-endpoint: /todo/**
+    triber-todo-overview-query-endpoint: /todo-overview/**
+
+info:
+  artifactId: "@project.artifactId@"
+  description: "@project.description@"
+  version: "@project.version@"

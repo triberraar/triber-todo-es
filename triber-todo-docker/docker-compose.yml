@@ -1,0 +1,98 @@
+version: '2'
+# infra
+services:
+  triber-todo-rabbit:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  triber-todo-mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+  triber-todo-elastic:
+    image: elasticsearch:2.4
+    ports:
+      - "9200:9200"
+  triber-todo-config-server:
+    image: triberraar/triber-todo-config-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8888:8888"
+  triber-todo-discovery:
+    image: triberraar/triber-todo-discovery
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    ports:
+      - "8761:8761"
+    depends_on:
+      - triber-todo-config-server
+  triber-todo-admin:
+    image: triberraar/triber-todo-admin
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+        - triber-todo-config-server
+        - triber-todo-discovery
+  triber-todo-gateway:
+    image: triberraar/triber-todo-gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - triber-todo-config-server
+      - triber-todo-discovery
+  triber-todo-event-store:
+    image: triberraar/triber-todo-event-store
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    depends_on:
+      - triber-todo-config-server
+      - triber-todo-discovery
+      - triber-todo-rabbit
+      - triber-todo-mongo
+# services
+  triber-todo-command-endpoint:
+    image: triberraar/triber-todo-command-endpoint
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    depends_on:
+      - triber-todo-config-server
+      - triber-todo-discovery
+  triber-todo-command-processor:
+    image: triberraar/triber-todo-command-processor
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    depends_on:
+      - triber-todo-config-server
+      - triber-todo-rabbit
+      - triber-todo-discovery
+  triber-todo-overview-query-endpoint:
+    image: triberraar/triber-todo-overview-query-endpoint
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    depends_on:
+      - triber-todo-config-server
+      - triber-todo-elastic
+      - triber-todo-discovery
+  triber-todo-overview-query-listener:
+    image: triberraar/triber-todo-overview-query-listener
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: always
+    depends_on:
+      - triber-todo-config-server
+      - triber-todo-elastic
+      - triber-todo-rabbit
+      - triber-todo-discovery
